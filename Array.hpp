@@ -15,6 +15,21 @@ auto ElementWise(const std::array<T, size>& lhs,
     return ret;
 }
 
+template<typename BinaryOperation,
+         typename T,
+         typename U,
+         std::size_t size,
+         typename = std::enable_if_t<std::is_arithmetic_v<U>>>
+auto ElementWise(const std::array<T, size>& lhs,
+                 U rhs,
+                 BinaryOperation operation) {
+    std::array<std::common_type_t<T, U>, size> ret;
+    for (std::size_t i = 0; i < size; i++) {
+        ret[i] = std::invoke(operation, lhs[i], rhs);
+    }
+    return ret;
+}
+
 template<typename T, typename U, std::size_t size>
 auto operator+(const std::array<T, size>& lhs,
                const std::array<U, size>& rhs) {
@@ -56,6 +71,70 @@ auto operator/(const std::array<T, size>& lhs,
 
 template<typename T, typename U, std::size_t size>
 auto& operator/=(std::array<T, size>& lhs, const std::array<U, size>& rhs) {
+    return lhs = lhs / rhs;
+}
+
+template<typename T,
+         typename U,
+         std::size_t size,
+         typename = std::enable_if_t<std::is_arithmetic_v<U>>>
+auto operator+(const std::array<T, size>& lhs, U rhs) {
+    return ElementWise(lhs, rhs, std::plus<std::common_type_t<T, U>>());
+}
+
+template<typename T,
+         typename U,
+         std::size_t size,
+         typename = std::enable_if_t<std::is_arithmetic_v<U>>>
+auto& operator+=(std::array<T, size>& lhs, U rhs) {
+    return lhs = lhs + rhs;
+}
+
+template<typename T,
+         typename U,
+         std::size_t size,
+         typename = std::enable_if_t<std::is_arithmetic_v<U>>>
+auto operator-(const std::array<T, size>& lhs, U rhs) {
+    return ElementWise(lhs, rhs, std::minus<std::common_type_t<T, U>>());
+}
+
+template<typename T,
+         typename U,
+         std::size_t size,
+         typename = std::enable_if_t<std::is_arithmetic_v<U>>>
+auto& operator-=(std::array<T, size>& lhs, U rhs) {
+    return lhs = lhs - rhs;
+}
+
+template<typename T,
+         typename U,
+         std::size_t size,
+         typename = std::enable_if_t<std::is_arithmetic_v<U>>>
+auto operator*(const std::array<T, size>& lhs, U rhs) {
+    return ElementWise(lhs, rhs, std::multiplies<std::common_type_t<T, U>>());
+}
+
+template<typename T,
+         typename U,
+         std::size_t size,
+         typename = std::enable_if_t<std::is_arithmetic_v<U>>>
+auto& operator*=(std::array<T, size>& lhs, U rhs) {
+    return lhs = lhs * rhs;
+}
+
+template<typename T,
+         typename U,
+         std::size_t size,
+         typename = std::enable_if_t<std::is_arithmetic_v<U>>>
+auto operator/(const std::array<T, size>& lhs, U rhs) {
+    return ElementWise(lhs, rhs, std::divides<std::common_type_t<T, U>>());
+}
+
+template<typename T,
+         typename U,
+         std::size_t size,
+         typename = std::enable_if_t<std::is_arithmetic_v<U>>>
+auto& operator/=(std::array<T, size>& lhs, U rhs) {
     return lhs = lhs / rhs;
 }
 
