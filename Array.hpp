@@ -43,14 +43,14 @@ auto ElementWise(T&& lhs, U&& rhs, Operation&& operation, std::false_type) {
     for (std::size_t i = 0; i < ret.size(); i++) {
         ret[i] = std::invoke(std::forward<Operation>(operation),
                              lhs[i],
-                             rhs);
+                             std::forward<Scalar>(rhs));
     }
     return ret;
 }
 
 template<typename T,
-        typename U,
-        typename = std::enable_if_t<is_std_array_v<T>>>
+         typename U,
+         typename = std::enable_if_t<is_std_array_v<T>>>
 auto operator+(T&& lhs, U&& rhs) {
     return ElementWise(std::forward<T>(lhs),
                        std::forward<U>(rhs),
@@ -59,15 +59,15 @@ auto operator+(T&& lhs, U&& rhs) {
 }
 
 template<typename T,
-        typename U,
-        typename = std::enable_if_t<is_std_array_v<T>>>
+         typename U,
+         typename = std::enable_if_t<is_std_array_v<T>>>
 auto& operator+=(T&& lhs, U&& rhs) {
     return lhs = std::forward<T>(lhs) + std::forward<U>(rhs);
 }
 
 template<typename T,
-        typename U,
-        typename = std::enable_if_t<is_std_array_v<T>>>
+         typename U,
+         typename = std::enable_if_t<is_std_array_v<T>>>
 auto operator-(T&& lhs, U&& rhs) {
     return ElementWise(std::forward<T>(lhs),
                        std::forward<U>(rhs),
@@ -76,15 +76,15 @@ auto operator-(T&& lhs, U&& rhs) {
 }
 
 template<typename T,
-        typename U,
-        typename = std::enable_if_t<is_std_array_v<T>>>
+         typename U,
+         typename = std::enable_if_t<is_std_array_v<T>>>
 auto& operator-=(T&& lhs, U&& rhs) {
     return lhs = std::forward<T>(lhs) - std::forward<U>(rhs);
 }
 
 template<typename T,
-        typename U,
-        typename = std::enable_if_t<is_std_array_v<T>>>
+         typename U,
+         typename = std::enable_if_t<is_std_array_v<T>>>
 auto operator*(T&& lhs, U&& rhs) {
     return ElementWise(std::forward<T>(lhs),
                        std::forward<U>(rhs),
@@ -93,15 +93,15 @@ auto operator*(T&& lhs, U&& rhs) {
 }
 
 template<typename T,
-        typename U,
-        typename = std::enable_if_t<is_std_array_v<T>>>
+         typename U,
+         typename = std::enable_if_t<is_std_array_v<T>>>
 auto& operator*=(T&& lhs, U&& rhs) {
     return lhs = std::forward<T>(lhs) * std::forward<U>(rhs);
 }
 
 template<typename T,
-        typename U,
-        typename = std::enable_if_t<is_std_array_v<T>>>
+         typename U,
+         typename = std::enable_if_t<is_std_array_v<T>>>
 auto operator/(T&& lhs, U&& rhs) {
     return ElementWise(std::forward<T>(lhs),
                        std::forward<U>(rhs),
@@ -110,8 +110,8 @@ auto operator/(T&& lhs, U&& rhs) {
 }
 
 template<typename T,
-        typename U,
-        typename = std::enable_if_t<is_std_array_v<T>>>
+         typename U,
+         typename = std::enable_if_t<is_std_array_v<T>>>
 auto& operator/=(T&& lhs, U&& rhs) {
     return lhs = std::forward<T>(lhs) / std::forward<U>(rhs);
 }
