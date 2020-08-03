@@ -12,7 +12,7 @@ template<typename T, std::size_t size>
 struct is_std_array<std::array<T, size>> : std::true_type {};
 
 template<typename T>
-using is_std_array_ref = is_std_array<std::remove_reference_t<T>>;
+using is_std_array_ref = is_std_array<std::remove_cvref_t<T>>;
 
 template<typename T>
 inline constexpr bool is_std_array_v = is_std_array_ref<T>::value;
